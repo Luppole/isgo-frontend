@@ -4,6 +4,7 @@ import Home from './Home';
 import Classroom from './Classroom';
 import Login from './Login';
 import Register from './Register';
+import Confirm from './Confirm';
 import { AuthContext, AuthProvider } from './AuthContext';
 import './App.css';
 
@@ -23,6 +24,7 @@ function AppContent() {
         <Route path="/classroom/:classId" element={isAuthenticated ? <Classroom /> : <Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/confirm" element={<Confirm />} />
       </Routes>
     </div>
   );
