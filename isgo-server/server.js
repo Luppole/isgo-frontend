@@ -128,6 +128,29 @@ app.post('/confirm', (req, res) => {
     });
 });
 
+app.post('/saveuserinfo', (req, res) => {
+    let { username, age, school, address, phone, interests, professions, skills } = req.body;
+
+    // Convert professions and skills to JSON strings
+    try {
+        professions = JSON.stringify(professions.split(',').map(profession => profession.trim()));
+        skills = JSON.stringify(skills.split(',').map(skill => skill.trim()));
+    } catch (error) {
+        console.error('Error converting professions or skills to JSON:', error);
+        return res.status(400).json({ message: 'Invalid professions or skills format', error });
+    }
+
+    db.query('INSERT INTO users_data (username, age, school, address, phone, interests, professions, skills) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE age = VALUES(age), school = VALUES(school), address = VALUES(address), phone = VALUES(phone), interests = VALUES(interests), professions = VALUES(professions), skills = VALUES(skills)', 
+             [username, age, school, address, phone, interests, professions, skills], (err, result) => {
+        if (err) {
+            console.error('Error saving user info:', err);
+            return res.status(500).json({ message: 'Failed to save user info', error: err });
+        }
+        res.status(200).json({ message: 'User info saved successfully' });
+    });
+});
+
+
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });

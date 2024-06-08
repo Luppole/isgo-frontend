@@ -31,3 +31,13 @@ export const confirmEmail = async (username, confirmationCode) => {
     throw error;
   }
 };
+
+export const saveUserInfo = async (username, age, school, address, phone, interests, professions, skills) => {
+  try {
+    const response = await axios.post(`${API_URL}/saveuserinfo`, { username, age, school, address, phone, interests, professions, skills });
+    return response.data;
+  } catch (error) {
+    console.error('Error saving user info:', error);
+    throw error;
+  }
+};
