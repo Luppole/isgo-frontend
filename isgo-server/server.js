@@ -16,24 +16,26 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'myappuser',
-    password: 'Itamar1405!',  // replace with your actual password
-    database: 'isgodb'     // ensure this is the correct database name
+    password: 'Itamar1405!',
+    database: 'isgodb'
 });
 
 db.connect((err) => {
-    if (err) throw err;
+    if (err) {
+        console.error('Database connection failed:', err);
+        throw err;
+    }
     console.log('Connected to MySQL');
 });
 
 const transporter = nodemailer.createTransport({
-    service: 'Gmail', // use your email service provider
+    service: 'Gmail',
     auth: {
-        user: 'your-email@gmail.com', // replace with your email
-        pass: 'your-email-password' // replace with your email password
+        user: 'isgodevteam@gmail.com', // replace with your email
+        pass: "giss llkc ttfz wrww" // replace with your app password if 2FA is enabled
     }
 });
 
-// Generate a confirmation code
 const generateConfirmationCode = () => {
     return crypto.randomBytes(20).toString('hex');
 };
@@ -43,26 +45,37 @@ app.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const confirmationCode = generateConfirmationCode();
 
-    db.query('INSERT INTO users (username, password, email, confirmation_code) VALUES (?, ?, ?, ?)', 
-             [username, hashedPassword, email, confirmationCode], (err, result) => {
+    db.query('SELECT * FROM users WHERE username = ? OR email = ?', [username, email], (err, results) => {
         if (err) {
-            console.error('Error during registration:', err);
+            console.error('Error checking existing users:', err);
             return res.status(500).json({ message: 'User registration failed', error: err });
         }
 
-        const mailOptions = {
-            from: 'your-email@gmail.com',
-            to: email,
-            subject: 'Email Confirmation',
-            text: `Please confirm your email by using the following code: ${confirmationCode}`
-        };
+        if (results.length > 0) {
+            return res.status(400).json({ message: 'Username or email already taken' });
+        }
 
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error('Error sending confirmation email:', error);
-                return res.status(500).json({ message: 'Error sending confirmation email', error: error });
+        db.query('INSERT INTO users (username, password, email, confirmation_code) VALUES (?, ?, ?, ?)', 
+                 [username, hashedPassword, email, confirmationCode], (err, result) => {
+            if (err) {
+                console.error('Error during registration:', err);
+                return res.status(500).json({ message: 'User registration failed', error: err });
             }
-            res.status(201).json({ message: 'User registered successfully. Please check your email to confirm your account.' });
+
+            const mailOptions = {
+                from: "isgodevteam@gmail.com",
+                to: email,
+                subject: 'Email Confirmation',
+                text: `Please confirm your email by using the following code: ${confirmationCode}`
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('Error sending confirmation email:', error);
+                    return res.status(500).json({ message: 'Error sending confirmation email', error: error });
+                }
+                res.status(201).json({ message: 'User registered successfully. Please check your email to confirm your account.' });
+            });
         });
     });
 });
