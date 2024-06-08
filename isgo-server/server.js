@@ -31,13 +31,13 @@ db.connect((err) => {
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'isgodevteam@gmail.com', // replace with your email
-        pass: "giss llkc ttfz wrww" // replace with your app password if 2FA is enabled
+        user: 'isgodevteam@gmail.com',
+        pass: 'qzjt rppg hftr xvpz'
     }
 });
 
 const generateConfirmationCode = () => {
-    return crypto.randomBytes(20).toString('hex');
+    return crypto.randomBytes(3).toString('hex'); // 6-character confirmation code
 };
 
 app.post('/register', async (req, res) => {
@@ -63,7 +63,7 @@ app.post('/register', async (req, res) => {
             }
 
             const mailOptions = {
-                from: "isgodevteam@gmail.com",
+                from: 'isgodevteam@gmail.com',
                 to: email,
                 subject: 'Email Confirmation',
                 text: `Please confirm your email by using the following code: ${confirmationCode}`
@@ -74,9 +74,34 @@ app.post('/register', async (req, res) => {
                     console.error('Error sending confirmation email:', error);
                     return res.status(500).json({ message: 'Error sending confirmation email', error: error });
                 }
-                res.status(201).json({ message: 'User registered successfully. Please check your email to confirm your account.' });
+                res.status(201).json({ message: 'User registered successfully. Please check your email to confirm your account.', username });
             });
         });
+    });
+});
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    db.query('SELECT * FROM users WHERE username = ?', [username], async (err, results) => {
+        if (err) {
+            console.error('Error during login:', err);
+            return res.status(500).json({ message: 'Server error', error: err });
+        }
+
+        if (results.length === 0) {
+            return res.status(400).json({ message: 'Invalid username or password' });
+        }
+
+        const user = results[0];
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: 'Invalid username or password' });
+        }
+
+        const token = jwt.sign({ id: user.id, username: user.username }, 'secret', { expiresIn: '1h' });
+        res.status(200).json({ message: 'Login successful', token });
     });
 });
 

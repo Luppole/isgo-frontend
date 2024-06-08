@@ -15,9 +15,12 @@ const Register = () => {
     try {
       const result = await register(username, password, email);
       setMessage('Registration successful. Please check your email to confirm your account.');
-      navigate('/login');
+      navigate('/confirm', { state: { username } }); // Redirect to confirmation page with username
     } catch (error) {
-      setMessage('Registration failed');
+      const errorMessage = error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : 'Registration failed';
+      setMessage(errorMessage);
       console.error('Error during registration:', error.response ? error.response.data : error.message);
     }
   };
