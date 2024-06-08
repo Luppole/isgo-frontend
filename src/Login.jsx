@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from './api';
+import './Login.css';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -14,6 +15,7 @@ const Login = () => {
             const result = await login(username, password);
             setMessage('Login successful');
             localStorage.setItem('token', result.token);
+            localStorage.setItem('username', username);
             navigate('/');  // Redirect to the root page
         } catch (error) {
             setMessage('Login failed');
@@ -21,8 +23,12 @@ const Login = () => {
         }
     };
 
+    const goToRegister = () => {
+        navigate('/register');
+    };
+
     return (
-        <div>
+        <div className="container">
             <h2>Login</h2>
             <form onSubmit={handleLogin}>
                 <input
@@ -40,6 +46,7 @@ const Login = () => {
                 <button type="submit">Login</button>
             </form>
             {message && <p>{message}</p>}
+            <button className="secondary" onClick={goToRegister}>Go to Register</button>
         </div>
     );
 };
