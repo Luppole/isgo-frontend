@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'myappuser',
-    password: 'Itamar1405!',
+    password: '!',
     database: 'isgodb'
 });
 
@@ -32,7 +32,7 @@ const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
         user: 'isgodevteam@gmail.com',
-        pass: 'qzjt rppg hftr xvpz'
+        pass: ''
     }
 });
 
