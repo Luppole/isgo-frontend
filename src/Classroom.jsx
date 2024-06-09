@@ -16,8 +16,8 @@ function Classroom() {
 
   return (
     <div className="classroom-container">
-      <div className="header">{classInfo.name} - Taught by: {classInfo.professor}</div>
       <div className="description">{classInfo.description}</div>
+      <h2>{classInfo.name}, Taught By: {classInfo.professor}</h2>
       <div className="whiteboard-container">
         <CanvasDraw
           ref={canvas => setCanvasRef(canvas)}

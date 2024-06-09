@@ -97,7 +97,7 @@
   }
   
   input:focus {
-    border-color: #0056b3; /* Highlight color when input is focused */
+    border-color: #ffffff; /* Highlight color when input is focused */
     outline: none; /* Removing the default focus outline */
   }
   

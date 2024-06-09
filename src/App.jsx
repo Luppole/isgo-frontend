@@ -18,7 +18,12 @@ function AppContent() {
     <div className="app-container">
       {isAuthenticated && (
         <div className="header">
-          <button className="profile-button" onClick={() => navigate('/profile')}>Logged in as: {username}</button>
+          <div className="header-left">
+            <button className="profile-button" onClick={() => navigate('/profile')}>
+              Logged in as: <strong>{username}</strong>
+            </button>
+            <button className="home-button" onClick={() => navigate('/')}>Home</button>
+          </div>
           <button className="logout-button" onClick={logout}>Logout</button>
         </div>
       )}
