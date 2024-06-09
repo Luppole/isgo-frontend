@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://isgoserver.ddns.net:3000';
+const API_URL = 'https://isgoserver.ddns.net';
 
 export const register = async (username, password, email) => {
   try {
