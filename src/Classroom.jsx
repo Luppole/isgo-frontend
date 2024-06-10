@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import CanvasDraw from 'react-canvas-draw';
 import { fetchClassById } from './api';
-import { io } from 'socket.io-client';
+import axios from 'axios';
 import './Classroom.css';
-
-const socket = io('http://localhost:3000');
 
 function Classroom() {
   let { classId } = useParams();
   const [classInfo, setClassInfo] = useState(null);
-  const canvasRef = useRef(null);
+  const [canvasRef, setCanvasRef] = useState(null);
 
   useEffect(() => {
     const getClassInfo = async () => {
@@ -23,22 +21,34 @@ function Classroom() {
     };
 
     getClassInfo();
-
-    socket.on('drawing', (data) => {
-      if (canvasRef.current) {
-        canvasRef.current.loadSaveData(data, true);
-      }
-    });
-
-    return () => {
-      socket.off('drawing');
-    };
   }, [classId]);
 
-  const handleDrawing = () => {
-    if (canvasRef.current) {
-      const data = canvasRef.current.getSaveData();
-      socket.emit('drawing', data);
+  useEffect(() => {
+    const fetchCanvasState = async () => {
+      try {
+        const response = await axios.get(`https://isgoserver.ddns.net/canvas/${classId}`);
+        if (canvasRef) {
+          canvasRef.loadSaveData(response.data.state, true);
+        }
+      } catch (error) {
+        console.error('Error fetching canvas state:', error);
+      }
+    };
+
+    fetchCanvasState();
+
+    const interval = setInterval(fetchCanvasState, 5000); // Poll every 5 seconds
+    return () => clearInterval(interval);
+  }, [classId, canvasRef]);
+
+  const handleSave = async () => {
+    if (canvasRef) {
+      const state = canvasRef.getSaveData();
+      try {
+        await axios.post(`https://isgoserver.ddns.net/canvas/${classId}`, { state });
+      } catch (error) {
+        console.error('Error saving canvas state:', error);
+      }
     }
   };
 
@@ -52,19 +62,25 @@ function Classroom() {
       <h2>{classInfo.name}, Taught By: {classInfo.professor}</h2>
       <div className="whiteboard-container">
         <CanvasDraw
-          ref={canvasRef}
-          onChange={handleDrawing}
+          ref={canvas => setCanvasRef(canvas)}
           brushColor="black"
           brushRadius={2}
           lazyRadius={0}
           canvasWidth={800}
           canvasHeight={400}
+          onChange={handleSave}
         />
       </div>
-      <button onClick={() => canvasRef.current.undo()}>
+      <button onClick={() => {
+        canvasRef.undo();
+        handleSave();
+      }}>
         Undo
       </button>
-      <button onClick={() => canvasRef.current.clear()}>
+      <button onClick={() => {
+        canvasRef.clear();
+        handleSave();
+      }}>
         Clear
       </button>
     </div>
