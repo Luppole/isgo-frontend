@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ClassBox from './ClassBox';
-import { getClasses } from './api';  // Ensure you have this function implemented
+import { getClasses } from './api';
 import './Home.css';
 
 function Home() {

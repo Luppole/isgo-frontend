@@ -4,6 +4,7 @@ import { saveUserInfo } from './api';
 import './UserInfo.css';
 
 const UserInfo = () => {
+  const [email, setEmail] = useState('');
   const [age, setAge] = useState('');
   const [school, setSchool] = useState('');
   const [address, setAddress] = useState('');
@@ -18,7 +19,7 @@ const UserInfo = () => {
     e.preventDefault();
     const username = localStorage.getItem('username'); // Assume username is stored in localStorage
     try {
-      const result = await saveUserInfo(username, age, school, address, phone, interests, professions, skills);
+      const result = await saveUserInfo(username, email, age || null, school, address, phone, interests, professions, skills);
       setMessage('Information saved successfully');
       navigate('/'); // Redirect to home or another page
     } catch (error) {
@@ -34,6 +35,12 @@ const UserInfo = () => {
     <div className="container">
       <h2>User Information</h2>
       <form onSubmit={handleSave}>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+        />
         <input
           type="number"
           value={age}

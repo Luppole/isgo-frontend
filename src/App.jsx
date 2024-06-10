@@ -23,6 +23,7 @@ function AppContent() {
             <button className="profile-button" onClick={() => navigate('/profile')}>Logged in as: {username}</button>
             <button className="home-button" onClick={() => navigate('/')}>Home</button>
             <button className="classes-button" onClick={() => navigate('/classes')}>Classes</button>
+            <button className="classes-button" onClick={() => navigate('/createclass')}>Create Class</button> {/* Add the Create Class button */}
           </div>
           <button className="logout-button" onClick={logout}>Logout</button>
         </div>
