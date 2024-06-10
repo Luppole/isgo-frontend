@@ -1,29 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ClassBox from './ClassBox';
 import './Home.css';
+import { fetchClasses, addClass } from './api';  // Import the functions to fetch and add classes
 
 function Home() {
-  const [classes, setClasses] = useState([
-    { id: 1, name: "Math", description: "Learn advanced mathematics.", professor: "John Doe" },
-    { id: 2, name: "Science", description: "Explore the world of science.", professor: "Jane Smith" },
-    { id: 3, name: "English", description: "Improve your English skills.", professor: "Emily Turner" }
-  ]);
+  const [classes, setClasses] = useState([]);
   const [newClassName, setNewClassName] = useState('');
   const [newClassDescription, setNewClassDescription] = useState('');
   const [newClassProfessor, setNewClassProfessor] = useState('');
 
-  const handleAddClass = () => {
-    const newId = classes.length + 1; // Simple ID generation
-    const newClass = {
-      id: newId,
-      name: newClassName,
-      description: newClassDescription,
-      professor: newClassProfessor
-    };
-    setClasses([...classes, newClass]);
-    setNewClassName('');
-    setNewClassDescription('');
-    setNewClassProfessor('');
+  // Function to fetch all classes
+  const loadClasses = async () => {
+    try {
+      const data = await fetchClasses();
+      setClasses(data);
+    } catch (error) {
+      console.error('Error fetching classes:', error);
+    }
+  };
+
+  // Fetch classes when the component mounts
+  useEffect(() => {
+    loadClasses();
+  }, []);
+
+  // Function to handle adding a new class
+  const handleAddClass = async () => {
+    try {
+      await addClass(newClassName, newClassDescription, newClassProfessor);
+      setNewClassName('');
+      setNewClassDescription('');
+      setNewClassProfessor('');
+      loadClasses();  // Fetch the updated class list
+    } catch (error) {
+      console.error('Error adding class:', error);
+    }
   };
 
   return (

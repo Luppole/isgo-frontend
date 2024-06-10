@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import CanvasDraw from 'react-canvas-draw';
 import './Classroom.css';  // Make sure to import the CSS file
-
-const classes = [
-  { id: 1, name: "Math", description: "Learn advanced mathematics.", professor: "John Doe" },
-  { id: 2, name: "Science", description: "Explore the world of science.", professor: "Jane Smith" },
-  { id: 3, name: "English", description: "Improve your English skills.", professor: "Emily Turner" }
-];
+import { fetchClassById } from './api';  // Import the function to fetch a class by ID
 
 function Classroom() {
   let { classId } = useParams();
-  const classInfo = classes.find(cls => cls.id.toString() === classId);
+  const [classInfo, setClassInfo] = useState(null);
   const [canvasRef, setCanvasRef] = useState(null);
+
+  useEffect(() => {
+    const loadClass = async () => {
+      try {
+        const data = await fetchClassById(classId);
+        setClassInfo(data);
+      } catch (error) {
+        console.error('Error fetching class:', error);
+      }
+    };
+    loadClass();
+  }, [classId]);
+
+  if (!classInfo) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="classroom-container">
