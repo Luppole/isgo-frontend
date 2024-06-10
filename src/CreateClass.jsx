@@ -1,49 +1,54 @@
 import React, { useState } from 'react';
-import { addClass } from './api';  // Import the addClass function
+import { addClass } from './api';
 import './CreateClass.css';
 
-function CreateClass() {
+const CreateClass = () => {
   const [className, setClassName] = useState('');
   const [description, setDescription] = useState('');
   const [professor, setProfessor] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleAddClass = async () => {
+  const handleAddClass = async (e) => {
+    e.preventDefault();
     try {
-      await addClass(className, description, professor);
+      const result = await addClass(className, description, professor);
+      setMessage('Class added successfully');
       setClassName('');
       setDescription('');
       setProfessor('');
-      // Optionally, you can add a success message or redirect the user
     } catch (error) {
+      setMessage('Failed to add class');
       console.error('Error adding class:', error);
     }
   };
 
   return (
     <div className="container">
-      <div className="form-container">
+      <h2>Create Class</h2>
+      <form onSubmit={handleAddClass}>
         <input
           type="text"
-          placeholder="Class Name"
           value={className}
           onChange={(e) => setClassName(e.target.value)}
+          placeholder="Class Name"
         />
         <input
           type="text"
-          placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          placeholder="Description"
         />
         <input
           type="text"
-          placeholder="Professor"
           value={professor}
           onChange={(e) => setProfessor(e.target.value)}
+          placeholder="Professor"
         />
-        <button className="add-class-button" onClick={handleAddClass}>Add Class</button>
-      </div>
+        <button type="submit">Add Class</button>
+      </form>
+      {message && <p>{message}</p>}
     </div>
   );
-}
+};
 
 export default CreateClass;

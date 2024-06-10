@@ -1,28 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ClassBox from './ClassBox';
+import { getClasses } from './api';
 import './Classes.css';
-import { fetchClasses } from './api';
 
 function Classes() {
   const [classes, setClasses] = useState([]);
 
   useEffect(() => {
-    const loadClasses = async () => {
+    const fetchClasses = async () => {
       try {
-        const data = await fetchClasses();
-        setClasses(data);
+        const response = await getClasses();
+        setClasses(response);
       } catch (error) {
         console.error('Error fetching classes:', error);
       }
     };
-    loadClasses();
+
+    fetchClasses();
   }, []);
 
   return (
-    <div className="classes-container">
-      {classes.map(cls => (
-        <ClassBox key={cls.id} classData={cls} />
-      ))}
+    <div className="container">
+      <h2>All Classes</h2>
+      <div className="classes-container">
+        {classes.map(cls => (
+          <ClassBox key={cls.id} classData={cls} />
+        ))}
+      </div>
     </div>
   );
 }

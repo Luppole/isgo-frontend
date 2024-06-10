@@ -19,10 +19,14 @@ function Home() {
     fetchClasses();
   }, []);
 
+  // Get the last three classes after reversing
+  const topClasses = [...classes].slice(0, 3);
+
   return (
     <div className="container">
+      <h2 className="top-classes-heading">Recently Opened Classes</h2>
       <div className="classes-container">
-        {classes.map(cls => (
+        {topClasses.map(cls => (
           <ClassBox key={cls.id} classData={cls} />
         ))}
       </div>

@@ -62,12 +62,16 @@ export const fetchClassById = async (classId) => {
   }
 };
 
+
 export const addClass = async (className, description, professor) => {
   try {
-    const response = await axios.post(`${API_URL}/classes`, { name: className, description, professor });
+    const response = await axios.post(`${API_URL}/addclass`, { name: className, description, professor });
     return response.data;
   } catch (error) {
     console.error('Error adding class:', error);
     throw error;
   }
 };
+
+
+
