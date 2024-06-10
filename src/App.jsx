@@ -7,7 +7,7 @@ import Register from './Register';
 import Confirm from './Confirm';
 import UserInfo from './UserInfo';
 import Profile from './Profile';
-import Classes from './Classes'; // Import the Classes component
+import CreateClass from './CreateClass'; // Import CreateClass component
 import { AuthContext, AuthProvider } from './AuthContext';
 import './App.css';
 
@@ -19,9 +19,11 @@ function AppContent() {
     <div className="app-container">
       {isAuthenticated && (
         <div className="header">
-          <button className="profile-button" onClick={() => navigate('/profile')}>Logged in as: <b>{username}</b></button>
-          <button className="profile-button" onClick={() => navigate('/classes')}>Classes</button>
-          <button className="profile-button" onClick={() => navigate('/')}>Home</button>
+          <div className="header-left">
+            <button className="profile-button" onClick={() => navigate('/profile')}>Logged in as: {username}</button>
+            <button className="home-button" onClick={() => navigate('/')}>Home</button>
+            <button className="classes-button" onClick={() => navigate('/classes')}>Classes</button>
+          </div>
           <button className="logout-button" onClick={logout}>Logout</button>
         </div>
       )}
@@ -34,7 +36,8 @@ function AppContent() {
           <Route path="/confirm" element={<Confirm />} />
           <Route path="/userinfo" element={<UserInfo />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/classes" element={<Classes />} /> {/* Add the Classes route */}
+          <Route path="/createclass" element={isAuthenticated ? <CreateClass /> : <Navigate to="/login" />} /> {/* Add the CreateClass route */}
+          <Route path="/classes" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} /> {/* Add the Classes route */}
         </Routes>
       </div>
     </div>

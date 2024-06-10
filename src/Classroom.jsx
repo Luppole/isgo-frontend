@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import CanvasDraw from 'react-canvas-draw';
-import './Classroom.css';  // Make sure to import the CSS file
-import { fetchClassById } from './api';  // Import the function to fetch a class by ID
+import { fetchClassById } from './api';  // Import the function
+import './Classroom.css';
 
 function Classroom() {
   let { classId } = useParams();
@@ -10,15 +10,16 @@ function Classroom() {
   const [canvasRef, setCanvasRef] = useState(null);
 
   useEffect(() => {
-    const loadClass = async () => {
+    const getClassInfo = async () => {
       try {
         const data = await fetchClassById(classId);
         setClassInfo(data);
       } catch (error) {
-        console.error('Error fetching class:', error);
+        console.error('Error fetching class info:', error);
       }
     };
-    loadClass();
+
+    getClassInfo();
   }, [classId]);
 
   if (!classInfo) {
