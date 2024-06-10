@@ -23,43 +23,22 @@ function Classroom() {
     };
 
     getClassInfo();
-  }, [classId]);
 
-  useEffect(() => {
-    socket.on('draw', (data) => {
+    socket.on('drawing', (data) => {
       if (canvasRef.current) {
-        const ctx = canvasRef.current.ctx.drawing;
-        const img = new Image();
-        img.src = data;
-        img.onload = () => {
-          ctx.drawImage(img, 0, 0);
-        };
-      }
-    });
-
-    socket.on('clear', () => {
-      if (canvasRef.current) {
-        canvasRef.current.clear();
+        canvasRef.current.loadSaveData(data, true);
       }
     });
 
     return () => {
-      socket.off('draw');
-      socket.off('clear');
+      socket.off('drawing');
     };
-  }, []);
+  }, [classId]);
 
-  const handleDraw = () => {
+  const handleDrawing = () => {
     if (canvasRef.current) {
-      const dataURL = canvasRef.current.getSaveData();
-      socket.emit('draw', dataURL);
-    }
-  };
-
-  const handleClear = () => {
-    if (canvasRef.current) {
-      canvasRef.current.clear();
-      socket.emit('clear');
+      const data = canvasRef.current.getSaveData();
+      socket.emit('drawing', data);
     }
   };
 
@@ -74,7 +53,7 @@ function Classroom() {
       <div className="whiteboard-container">
         <CanvasDraw
           ref={canvasRef}
-          onChange={handleDraw}
+          onChange={handleDrawing}
           brushColor="black"
           brushRadius={2}
           lazyRadius={0}
@@ -82,7 +61,10 @@ function Classroom() {
           canvasHeight={400}
         />
       </div>
-      <button onClick={handleClear}>
+      <button onClick={() => canvasRef.current.undo()}>
+        Undo
+      </button>
+      <button onClick={() => canvasRef.current.clear()}>
         Clear
       </button>
     </div>
