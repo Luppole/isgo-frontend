@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import CanvasDraw from 'react-canvas-draw';
-import { fetchClassById } from './api';
-import axios from 'axios';
+import { fetchClassById } from './api';  // Import the function
+import ChatBox from './ChatBox';  // Import the ChatBox component
+import io from 'socket.io-client';
 import './Classroom.css';
+
+const socket = io('http://localhost:3000');
 
 function Classroom() {
   let { classId } = useParams();
   const [classInfo, setClassInfo] = useState(null);
   const [canvasRef, setCanvasRef] = useState(null);
+  const username = localStorage.getItem('username');
 
   useEffect(() => {
     const getClassInfo = async () => {
@@ -24,32 +28,20 @@ function Classroom() {
   }, [classId]);
 
   useEffect(() => {
-    const fetchCanvasState = async () => {
-      try {
-        const response = await axios.get(`https://isgoserver.ddns.net/canvas/${classId}`);
-        if (canvasRef) {
-          canvasRef.loadSaveData(response.data.state, true);
-        }
-      } catch (error) {
-        console.error('Error fetching canvas state:', error);
+    socket.on('draw', (data) => {
+      if (canvasRef) {
+        canvasRef.loadSaveData(data, true);
       }
+    });
+
+    return () => {
+      socket.off('draw');
     };
+  }, [canvasRef]);
 
-    fetchCanvasState();
-
-    const interval = setInterval(fetchCanvasState, 5000); // Poll every 5 seconds
-    return () => clearInterval(interval);
-  }, [classId, canvasRef]);
-
-  const handleSave = async () => {
-    if (canvasRef) {
-      const state = canvasRef.getSaveData();
-      try {
-        await axios.post(`https://isgoserver.ddns.net/canvas/${classId}`, { state });
-      } catch (error) {
-        console.error('Error saving canvas state:', error);
-      }
-    }
+  const handleCanvasChange = () => {
+    const saveData = canvasRef.getSaveData();
+    socket.emit('draw', saveData);
   };
 
   if (!classInfo) {
@@ -58,31 +50,26 @@ function Classroom() {
 
   return (
     <div className="classroom-container">
-      <div className="description">{classInfo.description}</div>
-      <h2>{classInfo.name}, Taught By: {classInfo.professor}</h2>
-      <div className="whiteboard-container">
-        <CanvasDraw
-          ref={canvas => setCanvasRef(canvas)}
-          brushColor="black"
-          brushRadius={2}
-          lazyRadius={0}
-          canvasWidth={800}
-          canvasHeight={400}
-          onChange={handleSave}
-        />
+      <div className="chat-container">
+        <ChatBox classId={classId} username={username} socket={socket} />
       </div>
-      <button onClick={() => {
-        canvasRef.undo();
-        handleSave();
-      }}>
-        Undo
-      </button>
-      <button onClick={() => {
-        canvasRef.clear();
-        handleSave();
-      }}>
-        Clear
-      </button>
+      <div className="canvas-container">
+        <div className="description">{classInfo.description}</div>
+        <h2>{classInfo.name}, Taught By: {classInfo.professor}</h2>
+        <div className="whiteboard-container">
+          <CanvasDraw
+            ref={canvas => setCanvasRef(canvas)}
+            brushColor="black"
+            brushRadius={2}
+            lazyRadius={0}
+            canvasWidth={800}
+            canvasHeight={400}
+            onChange={handleCanvasChange}
+          />
+        </div>
+        <button className="undo" onClick={() => canvasRef.undo()}>Undo</button>
+        <button className="clear" onClick={() => canvasRef.clear()}>Clear</button>
+      </div>
     </div>
   );
 }
