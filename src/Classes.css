@@ -1,46 +1,53 @@
-/* ChatBox.css */
-.chat-box {
-  width: 300px;
-  height: 500px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
+/* Classes.css */
+.container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px; /* Set a max-width to control the container size */
+  margin: 0 auto; /* Center the container */
 }
 
-.messages {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 10px;
+h2 {
+  margin-bottom: 20px;
+  color: #333;
 }
 
-.messages div {
-  margin-bottom: 5px;
-  color: black; /* Set text color to black */
-}
-
-.message-input {
-  display: flex;
-}
-
-.message-input input {
-  flex: 1;
-  padding: 5px;
+.search-bar {
+  width: 100%;
+  max-width: 600px; /* Set a max-width for the search bar */
+  padding: 10px;
+  margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 16px;
 }
 
-.message-input button {
-  padding: 5px 10px;
-  margin-left: 5px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
+.classes-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center; /* Center the content within the container */
+  width: 100%;
 }
 
-.message-input button:hover {
-  background-color: #0056b3;
+.class-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px; /* Set a fixed width */
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.class-box h3 {
+  margin-bottom: 10px;
+  color: #007bff;
+}
+
+.class-box p {
+  margin-bottom: 5px;
+  color: #333;
 }
