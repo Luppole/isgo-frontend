@@ -1,17 +1,17 @@
+/* App.css */
 body {
   font-family: Arial, sans-serif;
   background-color: #f0f2f5;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent body from scrolling */
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh; /* Full viewport height */
-  overflow-y: auto; /* Enable vertical scrolling */
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .header {
@@ -22,45 +22,76 @@ body {
   padding: 10px 20px;
   width: 100%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  position: fixed; /* Fix header at the top */
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000; /* Ensure header is above other elements */
+  z-index: 1000;
   box-sizing: border-box;
 }
 
 .header-left {
   display: flex;
-  gap: 10px; /* Add space between buttons */
+  align-items: center;
+  flex: 1;
 }
 
-.username-display,
-.profile-button,
-.home-button,
-.classes-button {
-  font-size: 18px;
+.username-display {
+  margin-right: 20px;
+  font-weight: bold;
   color: #333;
   background: none;
   border: none;
   cursor: pointer;
+  padding: 8px;
+  white-space: nowrap; /* Prevent text from wrapping */
 }
 
-.profile-button:hover,
-.home-button:hover,
-.classes-button:hover {
-  text-decoration: underline;
+.nav-button {
+  margin-right: 20px;
+  padding: 8px 15px;
+  border: none;
+  background: none;
+  color: #000;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.3s, background-color 0.3s;
+  text-align: center; /* Add this to center the text */
+  width: fit-content; /* Add this to make the button width fit the content */
+}
+
+.nav-button:hover {
+  color: #007bff;
   background-color: lightgray;
+  border-radius: 4px;
+}
+
+.create-class-button {
+  padding: 8px 20px;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.create-class-button:hover {
+  background-color: #218838;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
 }
 
 .logout-button {
-  padding: 10px 20px;
+  padding: 8px 15px;
+  border: none;
   background-color: #dc3545;
   color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 4px;
   cursor: pointer;
+  font-weight: bold;
+  text-align: center; /* Add this to center the text */
+  width: fit-content; /* Add this to make the button width fit the content */
 }
 
 .logout-button:hover {
@@ -68,7 +99,7 @@ body {
 }
 
 .content {
-  margin-top: 100px; /* Ensure this matches the height of your fixed header */
+  margin-top: 70px;
   width: 100%;
   max-width: 1200px;
   padding: 20px;
@@ -81,7 +112,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 20px; /* Add margin to create space between containers */
+  margin-bottom: 20px;
 }
 
 h2 {
@@ -113,6 +144,8 @@ button {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  text-align: center; /* Add this to center the text */
+  width: fit-content; /* Add this to make the button width fit the content */
 }
 
 button:hover {
@@ -129,9 +162,9 @@ button:active {
 
 .card-container {
   display: flex;
-  flex-wrap: wrap; /* Allow cards to wrap to the next line */
-  justify-content: space-between; /* Adjust space between cards */
-  gap: 10px; /* Reduce the gap between cards */
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
   width: 100%;
 }
 
@@ -140,7 +173,7 @@ button:active {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: calc(32% - 10px); /* Adjust width to fit within the container and consider the gap */
+  width: calc(33% - 20px);
   box-sizing: border-box;
   text-align: center;
 }
