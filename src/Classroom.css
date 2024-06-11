@@ -1,106 +1,33 @@
 .classroom-container {
   display: flex;
-  justify-content: space-between;
   padding: 20px;
 }
 
 .chat-container {
-  width: 25%;
+  flex: 1;
   margin-right: 20px;
 }
 
 .canvas-container {
-  width: 70%;
-}
-
-.chat-box {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  height: 600px; /* Adjust as needed */
+  flex: 3;
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9; /* Light background for chat box */
-  font-family: Arial, sans-serif; /* Professional font */
+  align-items: center;
 }
 
-.messages {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 10px;
-  color: black; /* Make chat text black */
+.class-info {
+  margin-bottom: 20px;
 }
 
-.messages div {
-  margin-bottom: 10px;
-}
-
-.send-message {
+.buttons-container {
   display: flex;
-}
-
-.send-message input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px 0 0 5px;
-  font-family: Arial, sans-serif;
-  color: #333;
-}
-
-.send-message button {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 0 5px 5px 0;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  font-family: Arial, sans-serif;
-}
-
-.send-message button:hover {
-  background-color: #0056b3;
-}
-
-.whiteboard-container {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.whiteboard-container canvas {
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 button {
-  margin: 10px;
-  padding: 10px 20px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button.undo {
-  background-color: #28a745;
-  color: white;
-}
-
-button.clear {
-  background-color: #dc3545;
-  color: white;
-}
-
-button.undo:hover {
-  background-color: #218838;
-}
-
-button.clear:hover {
-  background-color: #c82333;
-}
-
-.description, h2 {
-  font-family: Arial, sans-serif;
-  color: #333;
+  width: 80px;
+  height: 40px;
+  font-size: 16px;
+  margin: 0 5px;
 }

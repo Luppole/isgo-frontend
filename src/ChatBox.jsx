@@ -1,46 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Classroom.css';
+import './ChatBox.css';
 
-const ChatBox = ({ classId, username, socket }) => {
+const API_URL = 'https://isgoserver.ddns.net';
+
+const ChatBox = ({ classId, username }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`https://isgoserver.ddns.net/chat/${classId}`);
+        const response = await axios.get(`${API_URL}/messages/${classId}`);
         setMessages(response.data);
       } catch (error) {
-        console.error('Error fetching chat messages:', error);
+        console.error('Error fetching messages:', error);
       }
     };
 
     fetchMessages();
+  }, [classId]);
 
-    socket.on('message', (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
-    });
-
-    return () => {
-      socket.off('message');
-    };
-  }, [classId, socket]);
-
-  const handleSendMessage = async () => {
-    const messageData = {
-      classId,
-      username,
-      message: newMessage,
-    };
-
-    socket.emit('message', messageData);
-
+  const sendMessage = async () => {
     try {
-      await axios.post('https://isgoserver.ddns.net/chat', messageData);
+      await axios.post(`${API_URL}/messages`, { classId, username, message: newMessage });
       setNewMessage('');
+      const response = await axios.get(`${API_URL}/messages/${classId}`);
+      setMessages(response.data);
     } catch (error) {
-      console.error('Error sending chat message:', error);
+      console.error('Error sending message:', error);
     }
   };
 
@@ -53,14 +41,14 @@ const ChatBox = ({ classId, username, socket }) => {
           </div>
         ))}
       </div>
-      <div className="send-message">
+      <div className="message-input">
         <input
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type your message..."
         />
-        <button onClick={handleSendMessage}>Send</button>
+        <button onClick={sendMessage}>Send</button>
       </div>
     </div>
   );
