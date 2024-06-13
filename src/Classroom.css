@@ -1,33 +1,115 @@
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #28a745;
+  --text-color: #333;
+  --background-color: #f0f2f5;
+  --button-background: #007bff;
+  --button-hover-background: #0056b3;
+  --button-text-color: white;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+}
+
 .classroom-container {
   display: flex;
+  flex-direction: row;
+  align-items: flex-start;
   padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .chat-container {
-  flex: 1;
-  margin-right: 20px;
+  position: fixed;
+  left: 0;
+  top: 70px;
+  width: 400px;
+  height: calc(100vh - 70px);
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+  color: black; /* Ensures all text inside the chat container is black */
 }
 
 .canvas-container {
-  flex: 3;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: white;
+  padding: 10px;
+  margin-left: 420px; /* Added margin to avoid overlapping with chat container */
+  margin-right: 20px; /* Added margin for centering */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .class-info {
   margin-bottom: 20px;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: fixed;
+  right: 20px;
+  top: 100px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar button,
+.toolbar input[type="color"],
+.toolbar input[type="range"] {
+  margin-bottom: 10px;
 }
 
 .buttons-container {
   display: flex;
-  justify-content: center;
-  margin-top: 10px;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 button {
-  width: 80px;
-  height: 40px;
+  padding: 10px 20px;
   font-size: 16px;
-  margin: 0 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--button-background);
+  color: var(--button-text-color);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: var(--button-hover-background);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+@media (min-width: 768px) {
+  .classroom-container {
+    justify-content: space-between;
+  }
+
+  .chat-container {
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
 }

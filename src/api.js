@@ -62,7 +62,6 @@ export const fetchClassById = async (classId) => {
   }
 };
 
-
 export const addClass = async (className, description, professor) => {
   try {
     const response = await axios.post(`${API_URL}/addclass`, { name: className, description, professor });
@@ -92,6 +91,3 @@ export const fetchCanvasState = async (classId) => {
     throw error;
   }
 };
-
-
-
