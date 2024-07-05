@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { addClass } from './api';
 import { AuthContext } from './AuthContext';
+import axios from 'axios';
 import './CreateClass.css';
 
 const CreateClass = () => {
@@ -18,6 +19,14 @@ const CreateClass = () => {
       setClassName('');
       setDescription('');
       setSubject('');
+
+      // Update user stats
+      await axios.post('https://isgoserver.ddns.net/updateStats', {
+        username,
+        classesOpened: 1,
+        minutesOnWebsite: 0,
+        totalMessagesSent: 0,
+      });
     } catch (error) {
       setMessage('Failed to add class');
       console.error('Error adding class:', error);
@@ -56,11 +65,6 @@ const CreateClass = () => {
           <option value="History">History</option>
           <option value="Geography">Geography</option>
         </select>
-        <input
-          type="hidden"
-          value={username}
-          readOnly
-        />
         <button type="submit" className="add-class-button">Add Class</button>
       </form>
       {message && <p>{message}</p>}

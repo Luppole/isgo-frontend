@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Profile.css';
 
 const Profile = () => {
-  const { username } = useParams();
+  const username = localStorage.getItem('username');
   const [userInfo, setUserInfo] = useState({});
+  const [userStats, setUserStats] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +17,14 @@ const Profile = () => {
         })
         .catch(error => {
           console.error('Error fetching user info:', error);
+        });
+
+      axios.get(`https://isgoserver.ddns.net/userStats?username=${username}`)
+        .then(response => {
+          setUserStats(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching user stats:', error);
         });
     }
   }, [username]);
@@ -41,6 +50,10 @@ const Profile = () => {
         <p><strong>Interests:</strong> {userInfo.interests}</p>
         <p><strong>Professions:</strong> {userInfo.professions}</p>
         <p><strong>Skills:</strong> {userInfo.skills}</p>
+        <h3>Statistics</h3>
+        <p><strong>Classes Opened:</strong> {userStats.classes_opened}</p>
+        <p><strong>Minutes on Website:</strong> {userStats.minutes_on_website}</p>
+        <p><strong>Total Messages Sent:</strong> {userStats.total_messages_sent}</p>
       </div>
     </div>
   );

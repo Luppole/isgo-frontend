@@ -14,14 +14,28 @@ h2 {
   color: #333;
 }
 
-.search-bar {
+.search-container {
+  display: flex;
   width: 100%;
   max-width: 600px; /* Set a max-width for the search bar */
-  padding: 10px;
   margin-bottom: 20px;
+}
+
+.search-bar {
+  flex-grow: 1;
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 5px 0 0 5px;
   font-size: 16px;
+}
+
+.search-category {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 0 5px 5px 0;
+  font-size: 16px;
+  background-color: #fff;
+  cursor: pointer;
 }
 
 .classes-container {

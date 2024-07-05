@@ -7,6 +7,7 @@ function ClassBox({ classData }) {
     <Link to={`/classroom/${classData.id}`} className="class-box">
       <div className="class-name">{classData.name}</div>
       <div className="class-description">{classData.description}</div>
+      <div className="class-subject">Subject: {classData.subject}</div>
       <div className="class-professor">Taught by: {classData.professor}</div>
     </Link>
   );

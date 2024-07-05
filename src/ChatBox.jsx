@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import axios from 'axios';
 import './ChatBox.css';
 
 const socket = io('https://isgoserver.ddns.net');
@@ -36,6 +37,16 @@ const ChatBox = ({ classId, username }) => {
     if (message.trim()) {
       const newMessage = { classId, username, message };
       socket.emit('sendMessage', newMessage);
+
+      axios.post('https://isgoserver.ddns.net/updateStats', {
+        username,
+        classesOpened: 0,
+        minutesOnWebsite: 0,
+        totalMessagesSent: 1,
+      }).catch(error => {
+        console.error('Error updating stats:', error);
+      });
+
       setMessage('');
     }
   };

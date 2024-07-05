@@ -91,6 +91,24 @@ function Classroom() {
     }
   };
 
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file && canvasRef.current) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = canvasRef.current.canvasContainer.children[1];
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Draw the image on the canvas
+          saveCanvas(); // Save the canvas state after drawing the image
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   if (!classInfo) {
     return <div>Loading...</div>;
   }
@@ -115,6 +133,7 @@ function Classroom() {
         />
         <div className="buttons-container">
           <button onClick={clearCanvas}>Clear</button>
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
         </div>
       </div>
       <div className="toolbar-container">
