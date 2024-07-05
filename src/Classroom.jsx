@@ -14,6 +14,7 @@ function Classroom() {
   const { username } = useContext(AuthContext);
   const [classInfo, setClassInfo] = useState(null);
   const canvasRef = useRef(null);
+  const imageCanvasRef = useRef(null); // Define the imageCanvasRef here
   const [tool, setTool] = useState('pen');
   const [brushColor, setBrushColor] = useState('#000000');
   const [brushSize, setBrushSize] = useState(5);
@@ -93,16 +94,25 @@ function Classroom() {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    if (file && canvasRef.current) {
+    if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const img = new Image();
         img.src = e.target.result;
         img.onload = () => {
-          const canvas = canvasRef.current.canvasContainer.children[1];
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Draw the image on the canvas
-          saveCanvas(); // Save the canvas state after drawing the image
+          const canvas = imageCanvasRef.current;
+          const sketchCanvas = canvasRef.current;
+          if (sketchCanvas) {
+            canvas.width = sketchCanvas.width;
+            canvas.height = sketchCanvas.height;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const imageDataUrl = canvas.toDataURL();
+            const ctxSketch = sketchCanvas.canvas.getContext('2d');
+            ctxSketch.drawImage(img, 0, 0, sketchCanvas.width, sketchCanvas.height);
+            saveCanvas();
+          }
         };
       };
       reader.readAsDataURL(file);
@@ -122,6 +132,7 @@ function Classroom() {
         <h2 className="class-info">
           {classInfo.name}, Taught By: <a href={`/profile/${classInfo.professor}`} target="_blank" rel="noopener noreferrer">{classInfo.professor}</a>
         </h2>
+        <canvas ref={imageCanvasRef} className="image-canvas" style={{ display: 'none' }}></canvas>
         <ReactSketchCanvas
           ref={canvasRef}
           strokeColor={brushColor}
