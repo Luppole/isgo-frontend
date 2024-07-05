@@ -101,7 +101,9 @@ function Classroom() {
         <ChatBox classId={classId} username={username} />
       </div>
       <div className="canvas-container">
-        <h2 className="class-info">{classInfo.name}, Taught By: {classInfo.professor}</h2>
+        <h2 className="class-info">
+          {classInfo.name}, Taught By: <a href={`/profile/${classInfo.professor}`} target="_blank" rel="noopener noreferrer">{classInfo.professor}</a>
+        </h2>
         <ReactSketchCanvas
           ref={canvasRef}
           strokeColor={brushColor}
@@ -116,8 +118,10 @@ function Classroom() {
         </div>
       </div>
       <div className="toolbar-container">
-        <button onClick={setPen}>Pen</button>
-        <button onClick={setEraser}>Eraser</button>
+        <div className="button-group">
+          <button onClick={setPen}>Pen</button>
+          <button onClick={setEraser}>Eraser</button>
+        </div>
         <label>Brush Size</label>
         <input
           type="range"
@@ -132,8 +136,10 @@ function Classroom() {
           value={brushColor}
           onChange={(e) => setBrushColor(e.target.value)}
         />
-        <button onClick={() => canvasRef.current.undo()}>Undo</button>
-        <button onClick={() => canvasRef.current.redo()}>Redo</button>
+        <div className="button-group">
+          <button className="undo" onClick={() => canvasRef.current.undo()}>Undo</button>
+          <button className="redo" onClick={() => canvasRef.current.redo()}>Redo</button>
+        </div>
       </div>
     </div>
   );

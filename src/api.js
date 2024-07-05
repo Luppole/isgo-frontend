@@ -62,15 +62,16 @@ export const fetchClassById = async (classId) => {
   }
 };
 
-export const addClass = async (className, description, professor) => {
+export const addClass = async (className, description, subject, professor) => {
   try {
-    const response = await axios.post(`${API_URL}/addclass`, { name: className, description, professor });
+    const response = await axios.post(`${API_URL}/addclass`, { name: className, description, subject, professor });
     return response.data;
   } catch (error) {
     console.error('Error adding class:', error);
     throw error;
   }
 };
+
 
 export const saveCanvasState = async (classId, canvasState) => {
   try {

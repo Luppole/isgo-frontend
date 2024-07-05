@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Profile.css';
 
 const Profile = () => {
-  const username = localStorage.getItem('username');
+  const { username } = useParams();
   const [userInfo, setUserInfo] = useState({});
   const navigate = useNavigate();
 

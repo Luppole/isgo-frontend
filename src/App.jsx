@@ -21,7 +21,7 @@ function AppContent() {
       {isAuthenticated && (
         <div className="header">
           <div className="header-left">
-            <button className="username-display" onClick={() => navigate('/profile')}>Logged in as: {username}</button>
+            <button className="username-display" onClick={() => navigate(`/profile/${username}`)}>Logged in as: {username}</button>
             <button className="nav-button home-button" onClick={() => navigate('/')}>Home</button>
             <button className="nav-button classes-button" onClick={() => navigate('/classes')}>Classes</button>
             <button className="nav-button create-class-button" onClick={() => navigate('/createclass')}>Create Class</button>
@@ -36,8 +36,8 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/confirm" element={<Confirm />} />
-          <Route path="/userinfo" element={<UserInfo />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/userinfo" element={isAuthenticated ? <UserInfo /> : <Navigate to="/login" />} />
+          <Route path="/profile/:username" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
           <Route path="/createclass" element={isAuthenticated ? <CreateClass /> : <Navigate to="/login" />} />
           <Route path="/classes" element={isAuthenticated ? <Classes /> : <Navigate to="/login" />} />
         </Routes>
