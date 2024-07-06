@@ -96,6 +96,7 @@
   .search-result {
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    color: black;
     cursor: pointer;
   }
   
