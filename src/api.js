@@ -102,7 +102,6 @@ export const fetchCanvasState = async (classId) => {
   }
 };
 
-// New functions for direct messages
 export const sendDirectMessage = async (sender, receiver, message) => {
   try {
     const response = await axios.post(`${API_URL}/direct-messages/send`, { sender, receiver, message });
