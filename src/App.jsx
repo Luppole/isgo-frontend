@@ -9,6 +9,7 @@ import UserInfo from './UserInfo';
 import Profile from './Profile';
 import CreateClass from './CreateClass';
 import Classes from './Classes';
+import Chat from './Chat';
 import { AuthContext, AuthProvider } from './AuthContext';
 import axios from 'axios';
 import './App.css';
@@ -66,6 +67,7 @@ function AppContent() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/createclass" element={isAuthenticated ? <CreateClass /> : <Navigate to="/login" />} />
           <Route path="/classes" element={isAuthenticated ? <Classes /> : <Navigate to="/login" />} />
+          <Route path="/chat/:receiver" element={isAuthenticated ? <Chat /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </div>

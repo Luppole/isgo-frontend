@@ -113,7 +113,6 @@ export const sendDirectMessage = async (sender, receiver, message) => {
   }
 };
 
-
 export const fetchDirectMessages = async (username, otherUsername) => {
   try {
     const response = await axios.get(`${API_URL}/direct-messages/${username}/${otherUsername}`);

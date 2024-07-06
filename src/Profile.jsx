@@ -78,6 +78,11 @@ const Profile = () => {
     setSearchResults([]);
   };
 
+  const closeChat = () => {
+    setShowChat(false);
+    setOtherUsername('');
+  };
+
   const fieldEmojis = {
     username: '👤',
     email: '📧',
@@ -149,7 +154,7 @@ const Profile = () => {
           </div>
         </div>
         {showChat && (
-          <Chat username={username} otherUsername={otherUsername} />
+          <Chat username={username} otherUsername={otherUsername} onClose={closeChat} />
         )}
       </div>
       <div className="update-container">
