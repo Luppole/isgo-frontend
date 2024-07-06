@@ -1,14 +1,21 @@
+/* Chat.css */
+
 .chat-container {
-    width: 300px;
-    max-width: 90%;
-    margin: 20px auto;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    height: 80%;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #fff;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
   .chat-header {
@@ -16,63 +23,104 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background: #f5f5f5;
+    background-color: #3897f0;
+    color: white;
+    cursor: move;
     border-bottom: 1px solid #ddd;
-  }
-  
-  .chat-header h3 {
-    margin: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
   }
   
   .close-button {
     background: none;
     border: none;
-    font-size: 20px;
+    color: white;
+    font-size: 1.5rem;
     cursor: pointer;
   }
   
   .messages-container {
-    flex: 1;
+    flex-grow: 1;
     padding: 10px;
     overflow-y: auto;
+    background-color: #fafafa;
   }
   
   .message {
-    padding: 5px 10px;
-    border-radius: 15px;
     margin-bottom: 10px;
-    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 20px;
+    display: block; /* Changed to block to ensure each message starts on a new line */
+    max-width: 75%;
+    word-wrap: break-word;
+    font-size: 14px;
   }
   
   .message.sent {
     align-self: flex-end;
-    background: #d1ffd1;
+    background-color: #dcf8c6;
+    border-bottom-right-radius: 5px;
+    margin-left: auto;
+    text-align: left; /* Align text to the left */
   }
   
   .message.received {
     align-self: flex-start;
-    background: #e0e0e0;
+    background-color: #fff;
+    border-bottom-left-radius: 5px;
+    margin-right: auto;
+    text-align: left; /* Align text to the left */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .message .sender {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .message .timestamp {
+    display: block;
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 5px; /* Added margin-top to separate the timestamp */
   }
   
   .input-container {
     display: flex;
     padding: 10px;
+    background-color: #fff;
     border-top: 1px solid #ddd;
-    background: #f5f5f5;
   }
   
-  .input-container input {
-    flex: 1;
+  input[type="text"] {
+    flex-grow: 1;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     border-radius: 20px;
+    transition: border-color 0.3s ease;
+    font-size: 14px;
+  }
+  
+  input[type="text"]:focus {
+    border-color: #3897f0;
     outline: none;
   }
   
-  .input-container button {
-    margin-left: 10px;
+  button {
     padding: 10px 15px;
+    margin-left: 10px;
     border: none;
+    background-color: #3897f0;
+    color: white;
+    cursor: pointer;
     border-radius: 20px;
-    background: #007bff;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 14px;
   }
+  
+  button:hover {
+    background-color: #2b7ac8;
+    transform: scale(1.05);
+  }
+  

@@ -131,3 +131,42 @@ h2, h3 {
 .search-results button:hover {
   background-color: #45a049;
 }
+
+.search-users {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.search-results {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-result {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  margin: 5px 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  width: 80%;
+  text-align: center;
+}
+
+.search-result:hover {
+  background-color: #0056b3;
+}
+
+.search-result button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}

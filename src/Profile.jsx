@@ -147,9 +147,9 @@ const Profile = () => {
           />
           <div className="search-results">
             {searchResults.map((user) => (
-              <div key={user.username} className="search-result" onClick={() => startChat(user.username)}>
+              <button key={user.username} className="search-result" onClick={() => startChat(user.username)}>
                 {user.username}
-              </div>
+              </button>
             ))}
           </div>
         </div>
