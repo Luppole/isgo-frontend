@@ -15,7 +15,7 @@
 .update-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align items to the left */
+  align-items: flex-start;
   margin-left: 10px;
 }
 
@@ -31,18 +31,28 @@
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .update-button:hover {
   background-color: #0056b3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.update-button:active {
+  background-color: #004494;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .flex-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   margin-bottom: 20px;
+  gap: 20px;
 }
 
 .container {
@@ -50,9 +60,9 @@
   padding: 20px 40px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 45%; /* Set the width to 45% */
+  width: 100%;
   max-width: 600px;
-  min-width: 50vh;
+  min-width: 300px;
   box-sizing: border-box;
   text-align: left;
   margin-bottom: 20px;
@@ -60,26 +70,36 @@
 
 .container h2 {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .container p {
   margin-bottom: 10px;
-  color: black; /* Change the color to black */
+  color: #555;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container p strong {
+  color: #333;
+  margin-right: 10px; /* Add space between the field name and value */
+}
+
+.container p input[type="checkbox"] {
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+  transform: scale(1);
+  accent-color: #007bff;
 }
 
 .update-button {
-  min-width: 40vh;
-  min-height: 5vh;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  min-width: 200px;
+  min-height: 50px;
+  font-size: 18px;
   align-self: center;
-  font-family: Arial, sans-serif;
-  
 }

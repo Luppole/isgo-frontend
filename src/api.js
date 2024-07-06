@@ -32,15 +32,26 @@ export const confirmEmail = async (username, confirmationCode) => {
   }
 };
 
-export const saveUserInfo = async (username, email, age, school, address, phone, interests, professions, skills) => {
+export const saveUserInfo = async (username, firstName, lastName, email, institute, nationality, city, phone, subjects, aboutMe) => {
   try {
-    const response = await axios.post(`${API_URL}/saveuserinfo`, { username, email, age, school, address, phone, interests, professions, skills });
+    const response = await axios.post('https://isgoserver.ddns.net/saveuserinfo', {
+      username,
+      firstName,
+      lastName,
+      email,
+      institute,
+      nationality,
+      city,
+      phone,
+      subjects,
+      aboutMe
+    });
     return response.data;
   } catch (error) {
-    console.error('Error saving user info:', error);
     throw error;
   }
 };
+
 
 export const getClasses = async () => {
   try {
