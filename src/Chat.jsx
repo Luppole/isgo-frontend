@@ -1,90 +1,93 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Draggable from 'react-draggable';
+import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { sendDirectMessage, fetchDirectMessages } from './api';
 import './Chat.css';
 
-const Chat = ({ username, otherUsername, onClose }) => {
+const socket = io('https://isgoserver.ddns.net');
+
+const Chat = ({ username, otherUsername, closeChat }) => {
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
-  const socketRef = useRef();
+  const [newMessage, setNewMessage] = useState('');
 
   useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await fetch(`https://isgoserver.ddns.net/direct-messages/${username}/${otherUsername}`);
+        const data = await response.json();
+        setMessages(data);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    };
+
     fetchMessages();
 
-    socketRef.current = io('https://isgoserver.ddns.net');
-    socketRef.current.emit('join', { username, otherUsername });
+    // Join the user to a room for real-time messaging
+    socket.emit('join', { username });
 
-    socketRef.current.on('message', (newMessage) => {
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    // Listen for new messages
+    socket.on('newMessage', (message) => {
+      if (message.sender === otherUsername || message.sender === username) {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      }
     });
 
     return () => {
-      socketRef.current.disconnect();
+      socket.off('newMessage');
     };
   }, [username, otherUsername]);
 
-  const fetchMessages = async () => {
-    try {
-      const fetchedMessages = await fetchDirectMessages(username, otherUsername);
-      setMessages(fetchedMessages);
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    }
-  };
-
   const handleSendMessage = async () => {
-    if (!message.trim()) return;
+    if (newMessage.trim() === '') return;
 
-    const newMessage = {
+    const messageData = {
       sender: username,
       receiver: otherUsername,
-      message,
-      created_at: new Date().toISOString()
+      message: newMessage.trim()
     };
 
     try {
-      await sendDirectMessage(newMessage.sender, newMessage.receiver, newMessage.message);
-      socketRef.current.emit('sendMessage', newMessage);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      setMessage('');
+      await fetch('https://isgoserver.ddns.net/direct-messages/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(messageData)
+      });
+
+      setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
     }
   };
 
-  const formatTime = (timestamp) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString();
-  };
-
   return (
-    <Draggable handle=".chat-header">
-      <div className="chat-container">
-        <div className="chat-header">
-          <h3>Chat with {otherUsername}</h3>
-          <button className="close-button" onClick={onClose}>X</button>
-        </div>
-        <div className="messages-container">
-          {messages.map((msg, index) => (
-            <div key={index} className={`message ${msg.sender === username ? 'sent' : 'received'}`}>
-              <span className="sender">{msg.sender}</span>
-              <p>{msg.message}</p>
-              <span className="timestamp">{formatTime(msg.created_at)}</span>
-            </div>
-          ))}
-        </div>
-        <div className="input-container">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message"
-          />
-          <button onClick={handleSendMessage}>Send</button>
-        </div>
+    <div className="chat-container">
+      <div className="chat-header">
+        <span>Chat with {otherUsername}</span>
+        <button className="close-button" onClick={closeChat}>X</button>
       </div>
-    </Draggable>
+      <div className="messages-container">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`message ${msg.sender === username ? 'sent' : 'received'}`}
+          >
+            <span className="sender">{msg.sender}</span>
+            {msg.message}
+            <span className="timestamp">{new Date(msg.created_at).toLocaleTimeString()}</span>
+          </div>
+        ))}
+      </div>
+      <div className="input-container">
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Type your message"
+        />
+        <button onClick={handleSendMessage}>Send</button>
+      </div>
+    </div>
   );
 };
 
