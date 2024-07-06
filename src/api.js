@@ -34,7 +34,7 @@ export const confirmEmail = async (username, confirmationCode) => {
 
 export const saveUserInfo = async (username, firstName, lastName, email, institute, nationality, city, phone, subjects, aboutMe) => {
   try {
-    const response = await axios.post('https://isgoserver.ddns.net/saveuserinfo', {
+    const response = await axios.post(`${API_URL}/saveuserinfo`, {
       username,
       firstName,
       lastName,
@@ -51,7 +51,6 @@ export const saveUserInfo = async (username, firstName, lastName, email, institu
     throw error;
   }
 };
-
 
 export const getClasses = async () => {
   try {
@@ -83,7 +82,6 @@ export const addClass = async (className, description, subject, professor) => {
   }
 };
 
-
 export const saveCanvasState = async (classId, canvasState) => {
   try {
     const response = await axios.post(`${API_URL}/canvas`, { classId, canvasState });
@@ -100,6 +98,38 @@ export const fetchCanvasState = async (classId) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching canvas state:', error);
+    throw error;
+  }
+};
+
+// New functions for direct messages
+export const sendDirectMessage = async (sender, receiver, message) => {
+  try {
+    const response = await axios.post(`${API_URL}/direct-messages/send`, { sender, receiver, message });
+    return response.data;
+  } catch (error) {
+    console.error('Error sending direct message:', error);
+    throw error;
+  }
+};
+
+
+export const fetchDirectMessages = async (username, otherUsername) => {
+  try {
+    const response = await axios.get(`${API_URL}/direct-messages/${username}/${otherUsername}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching direct messages:', error);
+    throw error;
+  }
+};
+
+export const fetchConversations = async (username) => {
+  try {
+    const response = await axios.get(`${API_URL}/conversations/${username}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching conversations:', error);
     throw error;
   }
 };

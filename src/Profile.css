@@ -1,105 +1,133 @@
 .profile-page {
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding: 20px;
 }
 
 .header-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
   margin-bottom: 20px;
 }
 
-.update-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 10px;
-}
-
-.update-container h2 {
-  margin: 0 0 10px 0;
-}
-
-.update-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.update-button:hover {
-  background-color: #0056b3;
+.profile-content {
+  width: 100%;
+  max-width: 800px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
-}
-
-.update-button:active {
-  background-color: #004494;
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .flex-container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
   margin-bottom: 20px;
-  gap: 20px;
 }
 
 .container {
-  background-color: #fff;
-  padding: 20px 40px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
-  min-width: 300px;
-  box-sizing: border-box;
-  text-align: left;
-  margin-bottom: 20px;
+  flex: 1;
+  margin: 10px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.container h2 {
+.profile-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.profile-value {
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+.profile-checkbox {
+  margin-left: 20px;
+}
+
+h2, h3 {
+  color: black;
   text-align: center;
   margin-bottom: 20px;
-  color: #333;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.container p {
-  margin-bottom: 10px;
-  color: #555;
-  font-family: Arial, sans-serif;
+.update-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.container p strong {
-  color: #333;
-  margin-right: 10px; /* Add space between the field name and value */
-}
-
-.container p input[type="checkbox"] {
-  margin-left: 10px;
-  width: 20px;
-  height: 20px;
-  transform: scale(1);
-  accent-color: #007bff;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .update-button {
-  min-width: 200px;
-  min-height: 50px;
-  font-size: 18px;
-  align-self: center;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.update-button:hover {
+  background-color: #45a049;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.search-bar {
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  transition: border-color 0.3s ease;
+}
+
+.search-bar:focus {
+  border-color: #4CAF50;
+}
+
+.search-results {
+  width: 100%;
+  max-width: 500px;
+  list-style-type: none;
+  padding: 0;
+}
+
+.search-results li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  color: black;
+  transition: background-color 0.3s ease;
+}
+
+.search-results li:hover {
+  background-color: #f1f1f1;
+}
+
+.search-results button {
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-results button:hover {
+  background-color: #45a049;
 }
