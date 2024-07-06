@@ -14,10 +14,13 @@ function Classroom() {
   const { username } = useContext(AuthContext);
   const [classInfo, setClassInfo] = useState(null);
   const canvasRef = useRef(null);
-  const imageCanvasRef = useRef(null); // Define the imageCanvasRef here
+  const imageCanvasRef = useRef(null);
+  const gridCanvasRef = useRef(null);
   const [tool, setTool] = useState('pen');
   const [brushColor, setBrushColor] = useState('#000000');
   const [brushSize, setBrushSize] = useState(5);
+  const [showGrid, setShowGrid] = useState(false);
+  const [gridCanvasSize, setGridCanvasSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     const getClassInfo = async () => {
@@ -103,20 +106,73 @@ function Classroom() {
           const canvas = imageCanvasRef.current;
           const sketchCanvas = canvasRef.current;
           if (sketchCanvas) {
-            canvas.width = sketchCanvas.width;
-            canvas.height = sketchCanvas.height;
+            const sketchCanvasElem = sketchCanvas.canvas;
+            canvas.width = sketchCanvasElem.width;
+            canvas.height = sketchCanvasElem.height;
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             const imageDataUrl = canvas.toDataURL();
-            const ctxSketch = sketchCanvas.canvas.getContext('2d');
-            ctxSketch.drawImage(img, 0, 0, sketchCanvas.width, sketchCanvas.height);
+            const ctxSketch = sketchCanvasElem.getContext('2d');
+            ctxSketch.drawImage(img, 0, 0, sketchCanvasElem.width, sketchCanvasElem.height);
             saveCanvas();
           }
         };
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const drawGrid = () => {
+    const canvas = gridCanvasRef.current;
+    const sketchCanvas = canvasRef.current ? canvasRef.current.canvas : null;
+    if (!canvas || !sketchCanvas) return;
+    const ctx = canvas.getContext('2d');
+    const gridSize = 20;
+
+    canvas.width = sketchCanvas.width;
+    canvas.height = sketchCanvas.height;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (showGrid) {
+      ctx.strokeStyle = '#e0e0e0';
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const updateGridCanvasSize = () => {
+      if (canvasRef.current) {
+        const sketchCanvasElem = canvasRef.current.canvas;
+        setGridCanvasSize({ width: sketchCanvasElem.width, height: sketchCanvasElem.height });
+      }
+    };
+
+    updateGridCanvasSize();
+    window.addEventListener('resize', updateGridCanvasSize);
+
+    return () => {
+      window.removeEventListener('resize', updateGridCanvasSize);
+    };
+  }, [classId]);
+
+  useEffect(() => {
+    drawGrid();
+  }, [showGrid, gridCanvasSize]);
+
+  const toggleGrid = () => {
+    setShowGrid((prevShowGrid) => !prevShowGrid);
   };
 
   if (!classInfo) {
@@ -142,9 +198,11 @@ function Classroom() {
           className="canvas"
           onChange={saveCanvas}
         />
+        <canvas ref={gridCanvasRef} className="grid-canvas" style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 1 }}></canvas>
         <div className="buttons-container">
           <button onClick={clearCanvas}>Clear</button>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
+          <button onClick={toggleGrid}>{showGrid ? 'Hide Grid' : 'Show Grid'}</button>
         </div>
       </div>
       <div className="toolbar-container">

@@ -16,6 +16,7 @@ const Register = () => {
       const result = await register(username, password, email);
       setMessage('Registration successful. Please check your email to confirm your account.');
       localStorage.setItem('username', username); // Store the username in localStorage
+      localStorage.setItem('email', email); // Store the email in localStorage
       navigate('/confirm'); // Redirect to confirmation page
     } catch (error) {
       const errorMessage = error.response && error.response.data && error.response.data.message
@@ -35,18 +36,21 @@ const Register = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
+          required
         />
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
+          required
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
+          required
         />
         <button type="submit">Register</button>
       </form>

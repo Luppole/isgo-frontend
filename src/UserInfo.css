@@ -30,9 +30,8 @@ input, select, textarea {
   font-size: 16px;
   box-sizing: border-box;
   transition: border-color 0.3s ease;
-  background-color: #fff;  /* Set the background color to white */
-  color: #333;  /* Set the text color to a dark shade */
-  align-self: stretch;
+  background-color: #fff;
+  color: #333;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -58,7 +57,6 @@ button:hover {
   background-color: #0056b3;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 button:active {
@@ -75,38 +73,32 @@ p {
 }
 
 .subjects-container {
+  margin: 20px 0;
+}
+
+.subjects-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px; /* Adjust gap to increase/decrease space between items */
-  margin-top: 20px;
+  gap: 10px;
 }
 
-.subject-label {
+.subject-item {
   display: flex;
   align-items: center;
-  font-size: 14px;
-  color: #333; /* Set the text color to black */
-  transition: transform 0.2s ease;
+  font-size: 16px;
+  color: #333;
 }
 
-.subject-label:hover {
-  transform: scale(1.05); /* Slightly enlarge on hover */
-}
-
-.subject-label input {
-  margin-right: 10px;
-  width: 18px;
-  height: 18px;
+.subject-item input {
+  margin-right: 5px;
+  width: 20px;
+  height: 20px;
+  accent-color: #007bff;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.subject-label input:checked {
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 100px;
+.subject-item input:hover {
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  transform: scale(1.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }

@@ -6,18 +6,18 @@
   --button-background: #007bff;
   --button-hover-background: #0056b3;
   --button-text-color: white;
-  --toolbar-background: #ffffff; /* White background for toolbar */
-  --toolbar-border: #e0e0e0; /* Light gray border for toolbar */
-  --toolbar-shadow: rgba(0, 0, 0, 0.1); /* Softer shadow */
-  --toolbar-text-color: #333; /* Darker text color for contrast */
-  --button-active-background: #0056b3; /* Active state color for buttons */
-  --button-undo-redo-background: #ff5722; /* Different color for undo/redo buttons */
-  --button-undo-redo-hover-background: #e64a19; /* Hover color for undo/redo buttons */
-  --input-background: #f9f9f9; /* Background for input elements */
-  --input-border: #ccc; /* Border for input elements */
-  --input-hover-border: #bbb; /* Hover border for input elements */
-  --slider-track: #ddd; /* Track color for the slider */
-  --slider-thumb: #007bff; /* Thumb color for the slider */
+  --toolbar-background: #ffffff;
+  --toolbar-border: #e0e0e0;
+  --toolbar-shadow: rgba(0, 0, 0, 0.1);
+  --toolbar-text-color: #333;
+  --button-active-background: #0056b3;
+  --button-undo-redo-background: #ff5722;
+  --button-undo-redo-hover-background: #e64a19;
+  --input-background: #f9f9f9;
+  --input-border: #ccc;
+  --input-hover-border: #bbb;
+  --slider-track: #ddd;
+  --slider-thumb: #007bff;
 }
 
 body {
@@ -42,7 +42,7 @@ body {
   padding: 10px;
   background-color: #f9f9f9;
   overflow-y: auto;
-  overflow-x: hidden; /* Hide horizontal scrollbar */
+  overflow-x: hidden;
 }
 
 .canvas-container {
@@ -149,7 +149,7 @@ canvas {
   background: var(--slider-track);
   outline: none;
   opacity: 0.7;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
   border-radius: 10px;
 }
 
@@ -175,20 +175,20 @@ canvas {
 
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
-  width: 12px; /* Width of the vertical scrollbar */
-  height: 12px; /* Height of the horizontal scrollbar */
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Background of the scrollbar track */
+  background: #f1f1f1;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888; /* Color of the scrollbar thumb */
+  background: #888;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Color of the scrollbar thumb on hover */
+  background: #555;
 }
