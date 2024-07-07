@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import Draggable from 'react-draggable';
-import { fetchDirectMessages, sendDirectMessage } from './api'; // Ensure these are correctly imported
+import { fetchDirectMessages, sendDirectMessage } from './api';
 import './Chat.css';
 
 const socket = io('https://isgoserver.ddns.net');

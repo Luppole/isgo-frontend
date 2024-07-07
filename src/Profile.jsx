@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Chat from './Chat';  // Import Chat component
+import Chat from './Chat'; // Import Chat component
 import './Profile.css';
 
 const Profile = () => {
