@@ -9,7 +9,7 @@ const socket = io('https://isgoserver.ddns.net');
 const Chat = ({ username, otherUsername, onClose }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [isSending, setIsSending] = useState(false); // Add state to handle sending status
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -24,10 +24,7 @@ const Chat = ({ username, otherUsername, onClose }) => {
 
     const handleReceiveMessage = (message) => {
       setMessages((prevMessages) => {
-        // Check if the message already exists in the state
-        const messageExists = prevMessages.some(
-          (msg) => msg.id === message.id
-        );
+        const messageExists = prevMessages.some((msg) => msg.id === message.id);
         if (messageExists) {
           return prevMessages;
         }
@@ -43,14 +40,14 @@ const Chat = ({ username, otherUsername, onClose }) => {
   }, [username, otherUsername]);
 
   const handleSendMessage = async () => {
-    if (isSending) return; // Prevent multiple sends
+    if (isSending) return;
 
     setIsSending(true);
     const message = { sender: username, receiver: otherUsername, message: newMessage, created_at: new Date().toISOString() };
     try {
-      await sendDirectMessage(username, otherUsername, newMessage);
-      socket.emit('send_message', message);
-      setMessages((prevMessages) => [...prevMessages, message]);
+      const sentMessage = await sendDirectMessage(username, otherUsername, newMessage);
+      socket.emit('send_message', sentMessage);
+      setMessages((prevMessages) => [...prevMessages, sentMessage]);
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
@@ -72,8 +69,8 @@ const Chat = ({ username, otherUsername, onClose }) => {
           <button className="close-button" onClick={onClose}>X</button>
         </div>
         <div className="messages-container">
-          {messages.map((msg, index) => (
-            <div key={index} className={`message ${msg.sender === username ? 'sent' : 'received'}`}>
+          {messages.map((msg) => (
+            <div key={msg.id} className={`message ${msg.sender === username ? 'sent' : 'received'}`}>
               <span className="sender">{msg.sender}</span>
               <p>{msg.message}</p>
               <span className="timestamp">{formatDate(msg.created_at)}</span>
