@@ -181,30 +181,6 @@ function Classroom() {
 
   return (
     <div className="classroom-container">
-      <div className="chat-container">
-        <ChatBox classId={classId} username={username} />
-      </div>
-      <div className="canvas-container">
-        <h2 className="class-info">
-          {classInfo.name}, Taught By: <a href={`/profile/${classInfo.professor}`} target="_blank" rel="noopener noreferrer">{classInfo.professor}</a>
-        </h2>
-        <canvas ref={imageCanvasRef} className="image-canvas" style={{ display: 'none' }}></canvas>
-        <ReactSketchCanvas
-          ref={canvasRef}
-          strokeColor={brushColor}
-          strokeWidth={brushSize}
-          width="100%" // Set width to 100% to stretch to full width
-          height="100vh" // Set height to 100vh to stretch to full height
-          className="canvas"
-          onChange={saveCanvas}
-        />
-        <canvas ref={gridCanvasRef} className="grid-canvas" style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 1 }}></canvas>
-        <div className="buttons-container">
-          <button onClick={clearCanvas}>Clear</button>
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-          <button onClick={toggleGrid}>{showGrid ? 'Hide Grid' : 'Show Grid'}</button>
-        </div>
-      </div>
       <div className="toolbar-container">
         <div className="button-group">
           <button onClick={setPen}>Pen</button>
@@ -228,6 +204,30 @@ function Classroom() {
           <button className="undo" onClick={() => canvasRef.current.undo()}>Undo</button>
           <button className="redo" onClick={() => canvasRef.current.redo()}>Redo</button>
         </div>
+      </div>
+      <div className="canvas-container">
+        <h2 className="class-info">
+          {classInfo.name}, Taught By: <a href={`/profile/${classInfo.professor}`} target="_blank" rel="noopener noreferrer">{classInfo.professor}</a>
+        </h2>
+        <canvas ref={imageCanvasRef} className="image-canvas" style={{ display: 'none' }}></canvas>
+        <ReactSketchCanvas
+          ref={canvasRef}
+          strokeColor={brushColor}
+          strokeWidth={brushSize}
+          width="100%"
+          height="100%"
+          className="canvas"
+          onChange={saveCanvas}
+        />
+        <canvas ref={gridCanvasRef} className="grid-canvas" style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 1 }}></canvas>
+        <div className="buttons-container">
+          <button onClick={clearCanvas}>Clear</button>
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
+          <button onClick={toggleGrid}>{showGrid ? 'Hide Grid' : 'Show Grid'}</button>
+        </div>
+      </div>
+      <div className="chat-container">
+        <ChatBox classId={classId} username={username} />
       </div>
     </div>
   );

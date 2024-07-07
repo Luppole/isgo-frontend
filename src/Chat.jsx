@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import Draggable from 'react-draggable';
 import { fetchDirectMessages, sendDirectMessage } from './api'; // Ensure these are correctly imported
@@ -10,6 +10,7 @@ const Chat = ({ username, otherUsername, onClose }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -38,6 +39,16 @@ const Chat = ({ username, otherUsername, onClose }) => {
       socket.off('receive_message', handleReceiveMessage);
     };
   }, [username, otherUsername]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const handleSendMessage = async () => {
     if (isSending) return;
@@ -76,6 +87,7 @@ const Chat = ({ username, otherUsername, onClose }) => {
               <span className="timestamp">{formatDate(msg.created_at)}</span>
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
         <div className="input-container">
           <input

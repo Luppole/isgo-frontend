@@ -111,30 +111,68 @@ const Profile = () => {
         <div className="flex-container">
           <div className="container profile-details">
             <h2>Profile</h2>
-            {Object.entries(userInfo).map(([key, value]) => (
-              <p key={key} className="profile-field">
-                <strong>{fieldEmojis[key] || ''} {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')}:</strong> <span className="profile-value">{value}</span>
-                <input
-                  type="checkbox"
-                  checked={visibility[key] !== false} // Default to checked
-                  onChange={() => handleCheckboxChange(key)}
-                  className="profile-checkbox"
-                />
-              </p>
-            ))}
+            <div className="profile-table">
+              {Object.entries(userInfo).map(([key, value]) => (
+                <div key={key} className="profile-row">
+                  <div className="profile-field">
+                    <strong>{fieldEmojis[key] || ''} {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')}:</strong>
+                  </div>
+                  <div className="profile-value">
+                    {value}
+                  </div>
+                  <div className="profile-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={visibility[key] !== false} // Default to checked
+                      onChange={() => handleCheckboxChange(key)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="container profile-stats" style={{ marginLeft: '20px' }}>
             <h2>Statistics</h2>
-            {Object.entries(userStats).map(([key, value]) => (
-              <p key={key} className="profile-field">
-                <strong>{fieldEmojis[key] || ''} {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')}:</strong> <span className="profile-value">{value}</span>
-                <input
-                  type="checkbox"
-                  checked={visibility[key] !== false} // Default to checked
-                  onChange={() => handleCheckboxChange(key)}
-                  className="profile-checkbox"
-                />
-              </p>
+            <div className="profile-table">
+              {Object.entries(userStats).map(([key, value]) => (
+                <div key={key} className="profile-row">
+                  <div className="profile-field">
+                    <strong>{fieldEmojis[key] || ''} {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')}:</strong>
+                  </div>
+                  <div className="profile-value">
+                    {value}
+                  </div>
+                  <div className="profile-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={visibility[key] !== false} // Default to checked
+                      onChange={() => handleCheckboxChange(key)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="container small-stats">
+          <h3>Activity</h3>
+          <div className="profile-table">
+            {['classes_opened', 'minutes_on_website', 'total_messages_sent'].map((key) => (
+              <div key={key} className="profile-row">
+                <div className="profile-field">
+                  <strong>{fieldEmojis[key] || ''} {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')}:</strong>
+                </div>
+                <div className="profile-value">
+                  {userStats[key]}
+                </div>
+                <div className="profile-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={visibility[key] !== false} // Default to checked
+                    onChange={() => handleCheckboxChange(key)}
+                  />
+                </div>
+              </div>
             ))}
           </div>
         </div>

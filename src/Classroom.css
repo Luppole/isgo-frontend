@@ -29,16 +29,28 @@ body {
 
 .classroom-container {
   display: flex;
-  padding: 5px;
+  height: 100vh;
+  width: 200vh;
+}
+
+.toolbar-container {
+  width: 25%;
+  border-right: 1px solid var(--toolbar-border);
+  padding: 20px;
+  background-color: var(--toolbar-background);
+  color: var(--toolbar-text-color);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 4px 6px var(--toolbar-shadow);
+  border-radius: 10px;
+  min-width: 20vh;
+  margin-left: 20px;
 }
 
 .chat-container {
-  position: fixed;
-  left: 0;
-  top: 70px;
-  width: 380px;
-  height: calc(100vh - 70px);
-  border: 1px solid #ccc;
+  width: 25%;
+  border-right: 1px solid #ccc;
   padding: 10px;
   background-color: #f9f9f9;
   overflow-y: auto;
@@ -51,7 +63,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 140vh;
+  width: 100%;
   margin-left: 50px;
   height: 85vh;
 }
@@ -60,30 +72,6 @@ body {
   margin-bottom: 20px;
   font-size: 18px;
   font-weight: bold;
-}
-
-.toolbar-container {
-  position: fixed;
-  right: 20px;
-  top: 70px;
-  width: 290px;
-  height: calc(100vh - 70px);
-  border: 1px solid var(--toolbar-border);
-  padding: 20px;
-  background-color: var(--toolbar-background);
-  color: var(--toolbar-text-color);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  box-shadow: 0 4px 6px var(--toolbar-shadow);
-  border-radius: 10px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  transition: all 0.3s ease;
-}
-
-canvas {
-  border: 1px solid #9c9c9c;
-  width: 100%;
 }
 
 .toolbar-container .button-group {
