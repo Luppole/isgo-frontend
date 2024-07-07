@@ -23,7 +23,16 @@ const Chat = ({ username, otherUsername, onClose }) => {
     fetchMessages();
 
     const handleReceiveMessage = (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
+      setMessages((prevMessages) => {
+        // Check if the message already exists in the state
+        const messageExists = prevMessages.some(
+          (msg) => msg.id === message.id
+        );
+        if (messageExists) {
+          return prevMessages;
+        }
+        return [...prevMessages, message];
+      });
     };
 
     socket.on('receive_message', handleReceiveMessage);
