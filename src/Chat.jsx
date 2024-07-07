@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import Draggable from 'react-draggable';
-import { fetchDirectMessages, sendDirectMessage } from './api';
+import { fetchDirectMessages, sendDirectMessage } from './api'; // Ensure these are correctly imported
 import './Chat.css';
 
 const socket = io('https://isgoserver.ddns.net');
@@ -9,6 +9,7 @@ const socket = io('https://isgoserver.ddns.net');
 const Chat = ({ username, otherUsername, onClose }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [isSending, setIsSending] = useState(false); // Add state to handle sending status
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -21,16 +22,21 @@ const Chat = ({ username, otherUsername, onClose }) => {
     };
     fetchMessages();
 
-    socket.on('receive_message', (message) => {
+    const handleReceiveMessage = (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
-    });
+    };
+
+    socket.on('receive_message', handleReceiveMessage);
 
     return () => {
-      socket.off('receive_message');
+      socket.off('receive_message', handleReceiveMessage);
     };
   }, [username, otherUsername]);
 
   const handleSendMessage = async () => {
+    if (isSending) return; // Prevent multiple sends
+
+    setIsSending(true);
     const message = { sender: username, receiver: otherUsername, message: newMessage, created_at: new Date().toISOString() };
     try {
       await sendDirectMessage(username, otherUsername, newMessage);
@@ -39,6 +45,8 @@ const Chat = ({ username, otherUsername, onClose }) => {
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -70,7 +78,7 @@ const Chat = ({ username, otherUsername, onClose }) => {
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type your message..."
           />
-          <button onClick={handleSendMessage}>Send</button>
+          <button onClick={handleSendMessage} disabled={isSending}>Send</button>
         </div>
       </div>
     </Draggable>
