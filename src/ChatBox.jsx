@@ -1,28 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
-import axios from 'axios';
 import './ChatBox.css';
 
-const socket = io('https://isgoserver.ddns.net');
+const socket = io('https://isgoserver.ddns.net'); // Update with your server URL
 
 const ChatBox = ({ classId, username }) => {
-  const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    socket.emit('join', classId);
-
-    socket.on('receiveMessage', (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
-      scrollToBottom();
-    });
-
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`https://isgoserver.ddns.net/messages/${classId}`);
-        setMessages(response.data);
-        scrollToBottom();
+        const response = await fetch(`/api/chat/${classId}`);
+        const data = await response.json();
+        setMessages(data);
       } catch (error) {
         console.error('Error fetching messages:', error);
       }
@@ -30,53 +23,73 @@ const ChatBox = ({ classId, username }) => {
 
     fetchMessages();
 
+    const handleReceiveMessage = (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+      scrollToBottom();
+    };
+
+    socket.on('receive_message', handleReceiveMessage);
+
     return () => {
-      socket.off('receiveMessage');
+      socket.off('receive_message', handleReceiveMessage);
     };
   }, [classId]);
 
-  const sendMessage = () => {
-    if (message.trim()) {
-      const newMessage = { classId, username, message, created_at: new Date().toISOString() };
-      socket.emit('sendMessage', newMessage);
-
-      axios.post('https://isgoserver.ddns.net/updateStats', {
-        username,
-        classesOpened: 0,
-        minutesOnWebsite: 0,
-        totalMessagesSent: 1,
-      }).catch(error => {
-        console.error('Error updating stats:', error);
-      });
-
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      setMessage('');
-      scrollToBottom();
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const handleSendMessage = async () => {
+    if (isSending || !newMessage.trim()) return;
+
+    setIsSending(true);
+    const message = { classId, sender: username, content: newMessage, timestamp: new Date().toISOString() };
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(message)
+      });
+      const savedMessage = await response.json();
+      socket.emit('send_message', savedMessage);
+      setMessages((prevMessages) => [...prevMessages, savedMessage]);
+      setNewMessage('');
+      scrollToBottom();
+    } catch (error) {
+      console.error('Error sending message:', error);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')} ${date.toLocaleDateString()}`;
   };
 
   return (
-    <div className="chat-box">
-      <div className="messages">
-        {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.username === username ? 'sent' : 'received'}`}>
-            <strong>{msg.username}: </strong> {msg.message}
+    <div className="chatbox-container">
+      <div className="messages-container">
+        {messages.map((msg) => (
+          <div key={msg.id} className={`message ${msg.sender === username ? 'sent' : 'received'}`}>
+            <span className="sender">{msg.sender}</span>
+            <p>{msg.content}</p>
+            <span className="timestamp">{formatDate(msg.timestamp)}</span>
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <div className="message-input">
+      <div className="input-container">
         <input
           type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type your message..."
         />
-        <button onClick={sendMessage}>Send</button>
+        <button onClick={handleSendMessage} disabled={isSending}>Send</button>
       </div>
     </div>
   );

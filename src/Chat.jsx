@@ -95,6 +95,11 @@ const Chat = ({ username, otherUsername, onClose }) => {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type your message..."
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                handleSendMessage();
+              }
+            }}
           />
           <button onClick={handleSendMessage} disabled={isSending}>Send</button>
         </div>
