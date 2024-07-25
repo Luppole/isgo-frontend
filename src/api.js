@@ -62,16 +62,6 @@ export const getClasses = async () => {
   }
 };
 
-export const fetchClassById = async (classId) => {
-  try {
-    const response = await axios.get(`${API_URL}/classes/${classId}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching class by ID:', error);
-    throw error;
-  }
-};
-
 export const addClass = async (className, description, subject, professor) => {
   try {
     const response = await axios.post(`${API_URL}/addclass`, { name: className, description, subject, professor });
@@ -82,12 +72,12 @@ export const addClass = async (className, description, subject, professor) => {
   }
 };
 
-export const saveCanvasState = async (classId, canvasState) => {
+export const fetchClassById = async (classId) => {
   try {
-    const response = await axios.post(`${API_URL}/canvas`, { classId, canvasState });
+    const response = await axios.get(`${API_URL}/classes/${classId}`);
     return response.data;
   } catch (error) {
-    console.error('Error saving canvas state:', error);
+    console.error('Error fetching class by ID:', error);
     throw error;
   }
 };
@@ -98,6 +88,16 @@ export const fetchCanvasState = async (classId) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching canvas state:', error);
+    throw error;
+  }
+};
+
+export const saveCanvasState = async (classId, canvasState) => {
+  try {
+    const response = await axios.post(`${API_URL}/canvas/${classId}`, { canvas_state: canvasState });
+    return response.data;
+  } catch (error) {
+    console.error('Error saving canvas state:', error);
     throw error;
   }
 };
