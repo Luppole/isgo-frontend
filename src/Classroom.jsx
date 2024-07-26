@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchClassById, saveCanvasState, fetchCanvasState } from './api';
 import ChatBox from './ChatBox';

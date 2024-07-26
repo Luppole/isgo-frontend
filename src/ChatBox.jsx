@@ -1,98 +1,56 @@
-import React, { useEffect, useState, useRef } from 'react';
-import io from 'socket.io-client';
-import './ChatBox.css';
+import React, { useState, useEffect } from 'react';
+import { fetchChatMessages, sendChatMessage } from './api';
 
-const socket = io('https://isgoserver.ddns.net'); // Update with your server URL
-
-const ChatBox = ({ classId, username }) => {
+function ChatBox({ classId, username }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [isSending, setIsSending] = useState(false);
-  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch(`/api/chat/${classId}`);
-        const data = await response.json();
-        setMessages(data);
+        const fetchedMessages = await fetchChatMessages(classId);
+        setMessages(fetchedMessages);
       } catch (error) {
         console.error('Error fetching messages:', error);
       }
     };
 
     fetchMessages();
-
-    const handleReceiveMessage = (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-      scrollToBottom();
-    };
-
-    socket.on('receive_message', handleReceiveMessage);
-
-    return () => {
-      socket.off('receive_message', handleReceiveMessage);
-    };
   }, [classId]);
 
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleSendMessage = async () => {
-    if (isSending || !newMessage.trim()) return;
-
-    setIsSending(true);
-    const message = { classId, sender: username, content: newMessage, timestamp: new Date().toISOString() };
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (newMessage.trim() === '') return;
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(message)
-      });
-      const savedMessage = await response.json();
-      socket.emit('send_message', savedMessage);
-      setMessages((prevMessages) => [...prevMessages, savedMessage]);
+      const sentMessage = await sendChatMessage(classId, username, newMessage);
+      setMessages([...messages, sentMessage]);
       setNewMessage('');
-      scrollToBottom();
     } catch (error) {
       console.error('Error sending message:', error);
-    } finally {
-      setIsSending(false);
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return `${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')} ${date.toLocaleDateString()}`;
   };
 
   return (
-    <div className="chatbox-container">
-      <div className="messages-container">
-        {messages.map((msg) => (
-          <div key={msg.id} className={`message ${msg.sender === username ? 'sent' : 'received'}`}>
-            <span className="sender">{msg.sender}</span>
-            <p>{msg.content}</p>
-            <span className="timestamp">{formatDate(msg.timestamp)}</span>
+    <div className="chat-box">
+      <div className="messages">
+        {messages.map((msg, index) => (
+          <div key={index} className="message">
+            <strong>{msg.username}:</strong> {msg.message}
           </div>
         ))}
-        <div ref={messagesEndRef} />
       </div>
-      <div className="input-container">
+      <form onSubmit={handleSendMessage}>
         <input
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type your message..."
+          placeholder="Type your message"
         />
-        <button onClick={handleSendMessage} disabled={isSending}>Send</button>
-      </div>
+        <button type="submit">Send</button>
+      </form>
     </div>
   );
-};
+}
 
 export default ChatBox;

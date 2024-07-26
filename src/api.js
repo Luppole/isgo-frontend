@@ -48,6 +48,7 @@ export const saveUserInfo = async (username, firstName, lastName, email, institu
     });
     return response.data;
   } catch (error) {
+    console.error('Error saving user info:', error);
     throw error;
   }
 };
@@ -77,28 +78,30 @@ export const fetchClassById = async (classId) => {
     const response = await axios.get(`${API_URL}/classes/${classId}`);
     return response.data;
   } catch (error) {
-    throw error;
-  }
-};
-
-export const saveCanvasState = async (classId, canvasState) => {
-  try {
-    await axios.post(`${apiUrl}/canvas/${classId}`, { canvas_state: canvasState });
-  } catch (error) {
-    console.error('Error saving canvas state:', error);
+    console.error('Error fetching class by ID:', error);
     throw error;
   }
 };
 
 export const fetchCanvasState = async (classId) => {
   try {
-    const response = await axios.get(`${apiUrl}/canvas/${classId}`);
+    const response = await axios.get(`${API_URL}/canvas/${classId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching canvas state:', error);
     throw error;
   }
 };
+
+export const saveCanvasState = async (classId, canvasState) => {
+  try {
+    await axios.post(`${API_URL}/canvas/${classId}`, { canvas_state: canvasState });
+  } catch (error) {
+    console.error('Error saving canvas state:', error);
+    throw error;
+  }
+};
+
 export const sendDirectMessage = async (sender, receiver, message) => {
   try {
     const response = await axios.post(`${API_URL}/direct-messages/send`, { sender, receiver, message });
@@ -125,6 +128,28 @@ export const fetchConversations = async (username) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching conversations:', error);
+    throw error;
+  }
+};
+
+// Add missing chat API functions
+
+export const fetchChatMessages = async (classId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/chat/${classId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching chat messages:', error);
+    throw error;
+  }
+};
+
+export const sendChatMessage = async (classId, username, message) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/chat`, { classId, username, message });
+    return response.data;
+  } catch (error) {
+    console.error('Error sending chat message:', error);
     throw error;
   }
 };
